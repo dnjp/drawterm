@@ -456,7 +456,13 @@ evkey(NSEvent *event)
 - (void) otherMouseUp:(NSEvent*)event { [self mouseevent:event]; }
 
 - (void) scrollWheel:(NSEvent*)event {
-	mousetrack(0, 0, [event deltaY]>0 ? 8 : 16, ticks());
+	if ([event hasPreciseScrollingDeltas]) {
+		// trackpad
+		mousetrack(0, 0, [event scrollingDeltaY]>0 ? 8 : 16, ticks());
+	} else {
+		// mouse
+		mousetrack(0, 0, [event deltaY]>0 ? 8 : 16, ticks());
+	}
 }
 
 - (BOOL) acceptsFirstResponder {
